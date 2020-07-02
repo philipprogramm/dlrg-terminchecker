@@ -25,6 +25,8 @@
  * SOFTWARE.
  */
 
+$bundesland = "BW";
+
 /**
  * checks if a date is in the holidays
  * @author Philipp Stappert <mail@philipprogramm.de>
@@ -34,10 +36,11 @@
  * @return boolean if the date is in holidays, the code returns true
  */
 function checkHolidays(string $date){
+    global $bundesland;
 	$rawDate = $date;
 	$date = explode("-", $rawDate);
 	$year = $date[0];
-	$state = getSetting("state");
+	$state = $bundesland;
 	$result = callAPI('GET', 'https://ferien-api.de/api/v1/holidays/' . $state . '/' . $year, false);
 
 	if ($result == "[]"){
@@ -45,14 +48,9 @@ function checkHolidays(string $date){
 	}
 
 	$ferien = json_decode($result, true);
-
-	// check variable
 	$inHoliday = false;
-
-	// convert date
 	$checkDate = date('Y-m-d', strtotime($rawDate));
 
-	// check if holiday
 	foreach($ferien as $ferienElement){
 		$beginDate = $ferienElement["start"];
 		$beginDate = explode("T", $beginDate)[0];
@@ -69,4 +67,45 @@ function checkHolidays(string $date){
 
 	// return
 	return($inHoliday);
+}
+
+/**
+ * general function to call a api
+ * @author Philipp Stappert <mail@philipprogramm.de>
+ * 
+ * @param string $method the http method (POST or PUT)
+ * @param string $url the url to send the data to
+ * @param string $data the data to send
+ * 
+ * @return the result
+ */
+function callAPI(string $method, string $url, string $data){
+	$curl = curl_init();
+	switch ($method){
+	   	case "POST":
+		  	curl_setopt($curl, CURLOPT_POST, 1);
+		  	if ($data)
+			 	curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+		  	break;
+	   	case "PUT":
+		  	curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
+			if ($data)
+				curl_setopt($curl, CURLOPT_POSTFIELDS, $data);			 					
+			break;
+		default:
+			if ($data)
+				$url = sprintf("%s?%s", $url, http_build_query($data));
+	}
+	// set options
+	curl_setopt($curl, CURLOPT_URL, $url);
+	curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+	curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+
+	// run it
+	$result = curl_exec($curl);
+	if(!$result){die("Fehler beim Verbinden mit der API");}
+	curl_close($curl);
+
+	// return it
+	return $result;
 }

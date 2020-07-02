@@ -1,0 +1,70 @@
+:root {
+	--blue: #0069b4;
+	--indigo: #6610f2;
+	--purple: #6f42c1;
+	--pink: #e83e8c;
+	--red: #e30613;
+	--orange: #fd7e14;
+	--yellow: #ffed00;
+	--green: #28a745;
+	--teal: #20c997;
+	--cyan: #17a2b8;
+	--white: #fff;
+	--gray: #575756;
+	--gray-dark: #343a40;
+	--primary: #0069b4;
+	--secondary: #575756;
+	--success: #28a745;
+	--info: #17a2b8;
+	--warning: #ffed00;
+	--danger: #e30613;
+	--light: #f8f9fa;
+	--dark: #343a40;
+}
+
+.bg-danger {
+	background-color: #e30613!important;
+}
+
+.btn-danger {
+	background-color: #e30613!important;
+}
+
+.border-danger {
+	border-color: #e30613!important;
+}
+
+.dlrg-logo{
+	display: flex; 
+    justify-content: center; 
+    align-items: center;
+}
+
+#content{
+	padding: 5px;
+}
+
+.form-middle{
+	margin-top: 5px;
+	padding: 20px;
+	padding-bottom: 5px;
+	margin: auto;
+	max-width: 500px;
+}
+
+.switch-container{
+	height: 100%;
+}
+
+table {
+	text-align: left;
+	overflow-x: scroll;
+}
+
+.adder {
+	max-width: 45px;
+}
+
+.select2 {
+	width: 100%;
+}
